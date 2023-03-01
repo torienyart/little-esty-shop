@@ -33,4 +33,14 @@ class Merchant < ApplicationRecord
     .limit(5)
   end
 
+  def unshipped_items
+    # where(status: 'pending').or(where(status: 'packaged')).order(:created_at)
+    # invoices.where()
+    invoice_items.where(status: 'pending').or(where(status: 'packaged')).order(:created_at)
+    # Invoice.joins(:invoice_items, :items)
+    #        .select('invoice_items.*, invoices.created_at, items.merchant_id')
+    #        .where({status: 0, "invoice_items.status": [0, 1], 'items.merchant_id': merchant_id})
+    #        .distinct.order(:created_at)
+  end
+
 end
