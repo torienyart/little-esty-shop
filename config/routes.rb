@@ -10,12 +10,15 @@ Rails.application.routes.draw do
 		end
 
     resources :invoices, only: [:show, :update]
+
+    resources :bulk_discounts, only: [:index, :show]
 	end
 
   namespace :admin do
     resources :invoices, only: [:index, :show, :update]
     resources :merchants, only: [:index, :show]
   end
+
 
   get "/merchants/:id/items", to: "merchant_items#index"
 	get "/merchants/:id/invoices", to: "merchant_invoices#index"
