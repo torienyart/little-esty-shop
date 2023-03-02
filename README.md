@@ -19,7 +19,6 @@
 1. Run the test suite with bundle exec rspec.
 1. Run your development server with rails s to see the app in action.
 
-
 # 👉Visit our Little Esty Shop👈
 Admin Dashboard: https://localhost:3000/admin/dashboard
 
@@ -43,3 +42,7 @@ Conner Van Loan https://github.com/C-V-L
 - Our GitHub API's are working, but not very secure or reliable.  We would shift to using gems like faraday, vcr, and webmock to ensure they are secure and testable.
 
 - Our Heroku is currently inoperable, we believe this is due to an auth token issue
+
+- DB
+![Database Image](https://user-images.githubusercontent.com/114954379/222480383-f2cf04df-facb-4200-af44-b0be44685105.png)
+
