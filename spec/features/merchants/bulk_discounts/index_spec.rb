@@ -34,4 +34,17 @@ describe 'As a user when i visit my bulk discount index page' do
     expect(page).to have_link("Bulk Discount #{@bd2.id}", href: merchant_bulk_discount_path(@merchant, @bd2))
     expect(page).to have_link("Bulk Discount #{@bd3.id}", href: merchant_bulk_discount_path(@merchant, @bd3))
   end
+
+  describe 'i can create a new bulk discount' do
+    it 'I see a link to create a new discount' do
+      expect(page).to have_link("Create Bulk Discount", href: new_bulk_discount_path(@merchant))
+    end
+
+    it 'When I click this link, I am taken to a new page where I see a form to add a new bulk discount' do
+      click_link "Create Bulk Discount"
+
+      expect(page).to have_current_path(new_bulk_discount_path(@merchant))
+    end
+    
+  end
 end
