@@ -3,13 +3,19 @@ require 'rails_helper'
 describe 'As a user when i visit my bulk discount index page' do
   before(:each) do
     @merchant = Merchant.create!(name: "Carlos Jenkins") 
+    @merchant_2 = Merchant.create!(name: "Lil Pump")
     @bd1 = @merchant.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 0.1)
     @bd2 = @merchant.bulk_discounts.create!(quantity_threshold: 15, percentage_discount: 0.20)
     @bd3 = @merchant.bulk_discounts.create!(quantity_threshold: 20, percentage_discount: 0.25)
+    @bd4 = @merchant_2.bulk_discounts.create!(quantity_threshold: 50, percentage_discount: 0.50)
+
     visit merchant_bulk_discounts_path(@merchant)
   end
 
   it 'I see all of my bulk discounts including their percentage and quantity threshold' do
+    
+    expect(page).to have_no_content(@bd4.id)
+
     within "#bd-#{@bd1.id}" do
       expect(page).to have_content(@bd1.id)
       expect(page).to have_content(@bd1.quantity_threshold)
