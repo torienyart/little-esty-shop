@@ -1,3 +1,4 @@
 <h1> Bulk Discount: <%= @discount.name %> </h1>
 <p> Percent Discount: <%= @discount.percentage_discount %>% </p>
 <p> Quantity Threshold: <%= @discount.quantity_threshold %> </p>
+<%= button_to "Edit Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{@discount.id}/edit", method: :get %>

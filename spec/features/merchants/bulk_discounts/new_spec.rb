@@ -22,5 +22,18 @@ RSpec.describe '#' do
       expect(current_path).to eq("/merchants/#{@merchant.id}/bulk_discounts")
       expect(page).to have_content("New Discount")
     end
+
+    it 'displays a flash message if the discount is not created successfully' do
+      fill_in "Name", with: ""
+      fill_in "Percentage discount", with: ''
+      fill_in "Quantity threshold", with: ''
+      click_button "Create Bulk discount"
+
+      expect(page).to have_content("Name can't be blank")
+      expect(page).to have_content("Percentage discount can't be blank")
+      expect(page).to have_content("Quantity threshold can't be blank")
+      expect(page).to have_content("Percentage discount is not a number")
+      expect(page).to have_content("Quantity threshold is not a number")
+    end
 	end
 end
