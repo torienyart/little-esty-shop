@@ -3,7 +3,7 @@ class CreateBulkDiscounts < ActiveRecord::Migration[5.2]
     create_table :bulk_discounts do |t|
       t.belongs_to :merchant, foreign_key: true
 
-      t.float :percentage_discount
+      t.integer :percentage_discount
       t.integer :quantity_threshold
       t.string :name
       

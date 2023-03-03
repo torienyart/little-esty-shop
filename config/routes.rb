@@ -4,11 +4,13 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get "/admin", to: 'admin#index'
 
+  resources :bulk_discounts, only: [:create]
+
 	resources :merchants, only: [:edit, :update, :new, :create] do
 		member do 
 			get 'dashboard'
 		end
-    resources :bulk_discounts, controller: 'merchant_bulk_discounts', only: [:show, :index, :new, :create, :edit, :update]
+    resources :bulk_discounts, controller: 'merchant_bulk_discounts', only: [:new, :show, :index, :create]
 
     resources :invoices, only: [:show, :update]
 	end
@@ -17,7 +19,6 @@ Rails.application.routes.draw do
     resources :invoices, only: [:index, :show, :update]
     resources :merchants, only: [:index, :show]
   end
-
 
   get "/merchants/:id/items", to: "merchant_items#index"
 	get "/merchants/:id/invoices", to: "merchant_invoices#index"

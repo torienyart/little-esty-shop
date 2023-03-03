@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Merchant Dashboard' do
+RSpec.describe 'Merchant Bulk Discount Index' do
 	before(:each) do
 		Merchant.destroy_all
 		Customer.destroy_all
@@ -11,12 +11,12 @@ RSpec.describe 'Merchant Dashboard' do
 		@merchant = Merchant.create!(name: "Carlos Jenkins") 
 		
     
-    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 0.5, quantity_threshold: 100, name: "BOGO")
-    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 0.2, quantity_threshold: 10, name: "Holiday Sale")
-    @summer = @merchant.bulk_discounts.create!(percentage_discount: 0.1, quantity_threshold: 5, name: "Summer Sale")
+    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 50, quantity_threshold: 100, name: "BOGO")
+    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10, name: "Holiday Sale")
+    @summer = @merchant.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 5, name: "Summer Sale")
 
     @merchant2 = Merchant.create!(name: "Someother Jenkins")
-    @winter = @merchant2.bulk_discounts.create!(percentage_discount: 0.05, quantity_threshold: 2, name: "Winter Sale")
+    @winter = @merchant2.bulk_discounts.create!(percentage_discount: 5, quantity_threshold: 2, name: "Winter Sale")
 
     visit "/merchants/#{@merchant.id}/bulk_discounts"
 	end
@@ -40,6 +40,12 @@ RSpec.describe 'Merchant Dashboard' do
         click_link @bogo.name
         expect(current_path).to eq("/merchants/#{@merchant.id}/bulk_discounts/#{@bogo.id}")
       end
+    end
+
+    it 'has a link to create a new discount' do
+      expect(page).to have_link("Create New Discount")
+      click_link "Create New Discount"
+      expect(current_path).to eq("/merchants/#{@merchant.id}/bulk_discounts/new")
     end
 	end
 end
