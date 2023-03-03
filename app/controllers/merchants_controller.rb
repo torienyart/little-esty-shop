@@ -4,6 +4,7 @@ class MerchantsController < ApplicationController
     @merchant = Merchant.find(params[:id])
     @top_five_customers = @merchant.customers.top_five_customers
     @items_to_ship = @merchant.invoice_items.unshipped_items
+    @discounts = @merchant.bulk_discounts
   end
 
   def new

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	resources :merchants, only: [:edit, :update, :new, :create] do
 		member do 
 			get 'dashboard'
+      resources :bulk_discounts, controller: 'merchant_bulk_discounts', only: [:show, :index]
 		end
 
     resources :invoices, only: [:show, :update]
@@ -16,6 +17,7 @@ Rails.application.routes.draw do
     resources :invoices, only: [:index, :show, :update]
     resources :merchants, only: [:index, :show]
   end
+
 
   get "/merchants/:id/items", to: "merchant_items#index"
 	get "/merchants/:id/invoices", to: "merchant_invoices#index"
