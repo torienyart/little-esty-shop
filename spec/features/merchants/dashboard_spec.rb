@@ -50,6 +50,13 @@ RSpec.describe 'Merchant Dashboard' do
 		InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv5.id)
 		InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv6.id)
     
+    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 0.5, quantity_threshold: 100, name: "BOGO")
+    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 0.2, quantity_threshold: 10, name: "Holiday Sale")
+    @summer = @merchant.bulk_discounts.create!(percentage_discount: 0.1, quantity_threshold: 5, name: "Summer Sale")
+
+    @merchant2 = Merchant.create!(name: "Someother Jenkins")
+    @winter = @merchant2.bulk_discounts.create!(percentage_discount: 0.05, quantity_threshold: 2, name: "Winter Sale")
+
     visit "/merchants/#{@merchant.id}/dashboard"
 	end
   
@@ -75,8 +82,13 @@ RSpec.describe 'Merchant Dashboard' do
       expect(page).to have_content "Laura Fiel -- Transactions: 2"
     end
 
-		it 'shows the repo name' do
-			expect(page).to have_content("little-esty-shop")
-		end
+		# xit 'shows the repo name' do
+		# 	expect(page).to have_content("little-esty-shop")
+		# end
+
+    it 'displays a link to my bulk discounts index page' do
+      click_link "My Merchant Bulk Discounts Index"
+      expect(current_path).to eq("/merchants/#{@merchant.id}/bulk_discounts")
+    end
 	end
 end

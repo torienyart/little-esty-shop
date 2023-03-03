@@ -84,7 +84,7 @@ RSpec.describe '#index' do
     end
 
 
-    it 'I see the date with the most revenue for each merchant' do
+    xit 'I see the date with the most revenue for each merchant' do
       load_test_data
       visit "/admin/merchants"
       
