@@ -39,4 +39,8 @@ class Merchant < ApplicationRecord
     .order('revenue DESC')
     .limit(5)
   end
+
+  def merchant_invoice_items(invoice_id)
+    invoice_items.where(invoice_id:invoice_id)
+  end
 end

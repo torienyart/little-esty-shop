@@ -2,6 +2,7 @@ class InvoicesController < ApplicationController
   def show
 		@invoice = Invoice.find(params[:id])
 		@merchant = Merchant.find(params[:merchant_id])
+		@invoice_items = @merchant.merchant_invoice_items(params[:id])
 	end
 
 	def update

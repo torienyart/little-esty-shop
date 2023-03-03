@@ -5,7 +5,7 @@
 <p>Customer: <%=@invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
 <br>
 
-<% @invoice.invoice_items.each do |ii| %>
+<% @invoice_items.each do |ii| %>
 <div id="invoice_item-<%= ii.item.id %>">
 	<p> Item: <%= ii.item.name %></p>
 	<p> Quantity: <%= ii.quantity %></p>
