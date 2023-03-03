@@ -57,6 +57,22 @@ describe 'As a user when i visit my bulk discount index page' do
       expect(page).to have_content("Quantity Threshold: 30")
       expect(page).to have_content("Discount Percentage: 30")
     end
-    
+  
+  end
+
+  describe 'i can delete a bulk discount' do
+    it 'next to each bulk discount I see a link to delete it' do
+      expect(page).to have_button("Delete Bulk Discount", count: 3)
+    end
+
+    it 'When I click this link I am redirected back to the bulk discounts index page and I no longer see the discount listed' do
+      within "#bd-#{@bd1.id}" do
+        click_button "Delete Bulk Discount"
+      end
+      
+      expect(page).to have_current_path(merchant_bulk_discounts_path(@merchant))
+      expect(page).to have_no_content("Bulk Discount #{@bd1.id}")
+      expect(page).to have_button("Delete Bulk Discount", count: 2)
+    end
   end
 end
