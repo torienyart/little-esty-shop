@@ -22,6 +22,17 @@ describe 'as a merchant when i visit my bulk discount show page' do
 
       expect(page).to have_current_path(edit_merchant_bulk_discount_path(@merchant, @bd1))
     end
+
+    it "When I click submit, I am redirected to the bulk discount's show page, and I see that the discount's attributes have been updated" do
+      click_button "Edit"
+      fill_in "bulk_discount[quantity_threshold]", with: '20'
+      fill_in "bulk_discount[percentage_discount]", with: '.20'
+      click_button "Update Bulk Discount"
+  
+      expect(page).to have_current_path(merchant_bulk_discount_path(@merchant, @bd1))
+      expect(page).to have_content('Quantity Threshold: 20')
+      expect(page).to have_content('Discount Percentage: 20.0%')
+    end
   
   end
 end
