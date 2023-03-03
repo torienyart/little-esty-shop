@@ -37,13 +37,25 @@ describe 'As a user when i visit my bulk discount index page' do
 
   describe 'i can create a new bulk discount' do
     it 'I see a link to create a new discount' do
-      expect(page).to have_link("Create Bulk Discount", href: new_bulk_discount_path(@merchant))
+      expect(page).to have_link("Create Bulk Discount", href: new_merchant_bulk_discount_path(@merchant))
     end
 
     it 'When I click this link, I am taken to a new page where I see a form to add a new bulk discount' do
       click_link "Create Bulk Discount"
 
-      expect(page).to have_current_path(new_bulk_discount_path(@merchant))
+      expect(page).to have_current_path(new_merchant_bulk_discount_path(@merchant))
+    end
+
+    it 'when i correctly fill out the form and click submit, I am taken to the index page where I see the new bulk discount' do
+      click_link "Create Bulk Discount"
+      fill_in 'bulk_discount[quantity_threshold]', :with => '30'
+      fill_in 'bulk_discount[percentage_discount]', :with => '.30'
+      click_button 'Create Bulk Discount'
+
+      expect(page).to have_current_path(merchant_bulk_discounts_path(@merchant))
+      expect(page).to have_content("Bulk Discount #{@bd1.id + 1}")
+      expect(page).to have_content("Quantity Threshold: 30")
+      expect(page).to have_content("Discount Percentage: 30")
     end
     
   end
