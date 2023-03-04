@@ -1,12 +1,14 @@
 <h1>Invoice <%=@invoice.id%></h1>
 <%= form_with model: @invoice, url: admin_invoice_path(@invoice), method: :patch  do |f|%>
-<h2>Invoice Status: <%= f.select(:status, Invoice.statuses.keys, selected: "#{@invoice.status}") %>
+<h3>Invoice Status: <%= f.select(:status, Invoice.statuses.keys, selected: "#{@invoice.status}") %>
 <%= f.submit 'Update Invoice Status'%>
-<%end%> </h2>
-<h2>Created On: <%= render partial: 'admin/formatted_created_at', locals: {x: @invoice} %> </h2>
-<h2>Customer Name: <%= @invoice.customer.first_name%> <%=@invoice.customer.last_name%></h2>
+<%end%> </h3>
+<h3>Created On: <%= render partial: 'admin/formatted_created_at', locals: {x: @invoice} %> </h3>
+<h3>Customer Name: <%= @invoice.customer.first_name%> <%=@invoice.customer.last_name%></h3>
 <div id="invoice_items">
-<h2>Total Revenue: $<%= sprintf("%.2f", (@invoice.invoice_items.total_revenue/100.00))%>
+<h3>Total Revenue: $<%= sprintf("%.2f", (@invoice.invoice_items.total_revenue/100.00))%></h3>
+<h3>Total Discounted Revenue: $<%= sprintf("%.2f", ((@invoice.invoice_items.total_revenue - @invoice.total_discount)/100.00))%></h3>
+<br>
 <h2>Invoice Items:</h2>
   <% @invoice.invoice_items.each do |invoice_item| %>
     <div id="<%=invoice_item.id%>">
