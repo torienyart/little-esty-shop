@@ -65,6 +65,7 @@ RSpec.describe Invoice, type: :model do
 
     it 'can calculate total discounted revenue' do
       @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
+      @bulk_discount2 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.09, quantity_threshold: 5)
       @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
       @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
       @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
