@@ -7,4 +7,8 @@ class InvoiceItem < ApplicationRecord
   def self.unshipped_items
     where(status: 'pending').or(where(status: 'packaged')).order(:created_at)
   end
+
+  def self.total_revenue
+    sum('invoice_items.unit_price * invoice_items.quantity')
+  end
 end
