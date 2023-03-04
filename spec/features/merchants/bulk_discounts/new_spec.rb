@@ -16,7 +16,7 @@ RSpec.describe '#' do
   describe 'As a merchant when I visit my bulk discount new page' do
     it 'has a form to create a new discount' do
       fill_in "Name", with: "New Discount"
-      fill_in "Percentage discount", with: 25
+      fill_in "Percentage discount", with: 0.25
       fill_in "Quantity threshold", with: 50
       click_button "Create Bulk discount"
       expect(current_path).to eq("/merchants/#{@merchant.id}/bulk_discounts")

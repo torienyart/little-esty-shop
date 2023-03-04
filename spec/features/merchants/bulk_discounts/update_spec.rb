@@ -11,8 +11,8 @@ RSpec.describe 'Merchant Bulk Discount Show' do
 		@merchant = Merchant.create!(name: "Carlos Jenkins") 
 		
     
-    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 50, quantity_threshold: 100, name: "BOGO")
-    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10, name: "Holiday Sale")
+    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 0.50, quantity_threshold: 100, name: "BOGO")
+    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 0.20, quantity_threshold: 10, name: "Holiday Sale")
 
     visit "/merchants/#{@merchant.id}/bulk_discounts/#{@bogo.id}/edit"
 	end
@@ -27,7 +27,7 @@ RSpec.describe 'Merchant Bulk Discount Show' do
       
       expect(current_path).to eq "/merchants/#{@merchant.id}/bulk_discounts/#{@bogo.id}"
       expect(page).to have_content("Bulk Discount: Buy one hundred and one, get a sweet deal")
-      expect(page).to have_content("Percent Discount: 50%")
+      expect(page).to have_content("Percent Discount: 0.5")
       expect(page).to have_content("Quantity Threshold: 101")
     end
 

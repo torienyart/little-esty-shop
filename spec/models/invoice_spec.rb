@@ -31,8 +31,6 @@ RSpec.describe Invoice, type: :model do
     InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv8.id, status: 1)
     InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv9.id, status: 1)
     InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv9.id, status: 2)
-
-
   end
   
   describe "relationships" do
@@ -62,6 +60,16 @@ RSpec.describe Invoice, type: :model do
       @invit5 = InvoiceItem.create!(item_id: @knife.id, invoice_id: @inv1.id, status: 2, quantity: 6, unit_price: 2050)
 
       expect(@inv1.total_revenue).to eq(85368)
+      
+    end
+
+    it 'can calculate total discounted revenue' do
+      @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
+      @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
+      @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
+      @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
+
+      expect(@inv1.discounted_revenue).to eq(61712.0)
     end
   end
 end
