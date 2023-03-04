@@ -9,9 +9,10 @@ Rails.application.routes.draw do
 			get 'dashboard'
 		end
     resources :bulk_discounts, controller: 'merchant_bulk_discounts', only: [:new, :destroy, :show, :index, :create, :edit, :update]
-
-    resources :invoices, only: [:show, :update]
+    resources :invoices, controller: 'merchant_invoices', only: [:show, :update]
 	end
+
+  resources :invoice_items, only: [:update]
 
   namespace :admin do
     resources :invoices, only: [:index, :show, :update]

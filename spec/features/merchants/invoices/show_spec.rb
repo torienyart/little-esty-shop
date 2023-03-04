@@ -112,5 +112,16 @@ RSpec.describe 'Merchant Invoices Index' do
 			end
 		end
 
+    describe 'bulk_discounts US_6' do
+      before :each do
+        @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
+				visit merchant_invoice_path(@merchant.id, @inv1.id)
+			end
+
+      it 'I see the total discounted revenue for my merchant from this invoice' do 
+        expect(page).to have_content("Total Revenue: $56.00")
+        expect(page).to have_content("Total Discounted Revenue: $52.50")
+      end
+    end
 	end
 end

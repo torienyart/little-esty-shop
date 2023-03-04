@@ -11,8 +11,8 @@ RSpec.describe 'Merchant Bulk Discount Show' do
 		@merchant = Merchant.create!(name: "Carlos Jenkins") 
 		
     
-    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 50, quantity_threshold: 100, name: "BOGO")
-    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10, name: "Holiday Sale")
+    @bogo = @merchant.bulk_discounts.create!(percentage_discount: 0.50, quantity_threshold: 100, name: "BOGO")
+    @holiday = @merchant.bulk_discounts.create!(percentage_discount: 0.20, quantity_threshold: 10, name: "Holiday Sale")
 
     visit "/merchants/#{@merchant.id}/bulk_discounts/#{@bogo.id}"
 	end
@@ -20,7 +20,7 @@ RSpec.describe 'Merchant Bulk Discount Show' do
   describe 'As a merchant when I visit a bulk discount show page' do
     it 'displays the bulk discount and its details' do
       expect(page).to have_content("Bulk Discount: #{@bogo.name}")
-      expect(page).to have_content("Percent Discount: 50%")
+      expect(page).to have_content("Percent Discount: 0.5")
       expect(page).to have_content("Quantity Threshold: 100")
       expect(page).to_not have_content @holiday.name
     end
@@ -28,7 +28,7 @@ RSpec.describe 'Merchant Bulk Discount Show' do
     it 'has a link to edit the discount' do
       expect(page).to have_button "Edit Discount"
       expect(page).to have_content("Bulk Discount: #{@bogo.name}")
-      expect(page).to have_content("Percent Discount: 50%")
+      expect(page).to have_content("Percent Discount: 0.5")
       expect(page).to have_content("Quantity Threshold: 100")
       click_button "Edit Discount"
 
