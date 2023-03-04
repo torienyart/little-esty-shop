@@ -65,12 +65,32 @@ RSpec.describe Invoice, type: :model do
 
     it 'can calculate total discounted revenue' do
       @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
+      ## Adds a second applicable discount to same invoice_item to test that only the highest discount is applied
       @bulk_discount2 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.09, quantity_threshold: 5)
       @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
       @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
       @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
 
       expect(@inv1.discounted_revenue).to eq(61712.0)
+    end
+
+    it 'will return the total even if no discounts are applied' do
+      @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
+      @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
+      @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
+
+      expect(@inv1.discounted_revenue).to eq 63934
+    end
+
+    it 'can handle multiple discounts on different items' do
+      @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
+      @bulk_discount2 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.05, quantity_threshold: 4)
+      @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
+      @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
+      @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
+
+      expect(@inv1.discounted_revenue).to eq 59959
+
     end
   end
 end
