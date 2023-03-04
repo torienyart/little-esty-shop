@@ -81,4 +81,20 @@ describe 'As a user when i visit my bulk discount index page' do
       expect(page).to have_button("Delete Bulk Discount", count: 2)
     end
   end
+
+  describe 'I see a section with a header of "Upcoming Holidays"' do
+    it 'There is a section with a header of "Upcoming Holidays"' do
+      within '#upcoming_holidays' do
+        expect(page).to have_content('Upcoming Holidays')
+      end
+    end
+
+    it 'In this section the name and date of the next 3 upcoming US holidays are listed.' do
+      within '#upcoming_holidays' do
+        expect(page).to have_content('Good Friday')
+        expect(page).to have_content('Memorial Day')
+        expect(page).to have_content('Juneteenth')
+      end
+    end
+  end
 end
