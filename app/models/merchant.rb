@@ -11,7 +11,7 @@ class Merchant < ApplicationRecord
   enum status: ["disabled", "enabled"]
 
   def invoices_with_items
-	invoices.select(:id).distinct
+	  invoices.select(:id).distinct
   end
 				
   def top_five_items_by_revenue
@@ -42,5 +42,6 @@ class Merchant < ApplicationRecord
 
   def merchant_invoice_items(invoice_id)
     invoice_items.where(invoice_id:invoice_id)
+    # require 'pry'; binding.pry
   end
 end

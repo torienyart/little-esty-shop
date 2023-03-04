@@ -15,14 +15,14 @@ RSpec.describe Merchant, type: :model do
 		before do
 			@merchant = Merchant.create(name: "Handmades")
 			@merchant2 = Merchant.create(name: "No One Cares")
-
+	
 			@cust1 = FactoryBot.create(:customer)
 			@cust2 = FactoryBot.create(:customer)
 			w = Date.new(2019, 7, 18)
 			x = Date.new(2020, 8, 17)
 			y = Date.new(2020, 10, 9)
 			z = Date.new(2016, 8, 3)
-
+	
 			@inv1 = @cust1.invoices.create!(status: 1, created_at: w)
 			@inv2 = @cust1.invoices.create!(status: 1, created_at: w)
 			@inv3 = @cust1.invoices.create!(status: 1, created_at: x)
@@ -30,7 +30,7 @@ RSpec.describe Merchant, type: :model do
 			@inv5 = @cust2.invoices.create!(status: 1, created_at: z)
 			@inv6 = @cust2.invoices.create!(status: 1, created_at: z)
 			@inv7 = @cust2.invoices.create!(status: 1, created_at: z)
-
+	
 			@trans1 = @inv1.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
 			@trans1_5 = @inv1.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
 			@trans2 = @inv2.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
@@ -48,7 +48,7 @@ RSpec.describe Merchant, type: :model do
 			@trans14 = @inv5.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
 			@trans15 = @inv5.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
 			@trans16 = @inv6.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
-
+	
 			@bowl = @merchant.items.create!(name: "bowl", description: "it's a bowl", unit_price: 350) 
 			@knife = @merchant.items.create!(name: "knife", description: "it's a knife", unit_price: 300) 
 			@spoon = @merchant.items.create!(name: "spoon", description: "it's a spoon", unit_price: 275) 
@@ -68,6 +68,24 @@ RSpec.describe Merchant, type: :model do
 			InvoiceItem.create!(item_id: @pan.id, invoice_id: @inv4.id, quantity: 6, unit_price: 15, status: 1)
 		end
 
+		it "can return invoice items for a merchants invoice by merchant" do
+			Merchant.destroy_all
+			Item.destroy_all
+			InvoiceItem.destroy_all
+			@merchant = Merchant.create(name: "Handmades")
+			@merchant2 = Merchant.create(name: "No One Cares")
+			@bowl = @merchant.items.create!(name: "bowl", description: "it's a bowl", unit_price: 350) 
+			@knife = @merchant.items.create!(name: "knife", description: "it's a knife", unit_price: 300) 
+			@spoon = @merchant.items.create!(name: "spoon", description: "it's a spoon", unit_price: 275) 
+			@bed = @merchant2.items.create!(name: "bed", description: "it's a bed", unit_price: 2500)
+			@invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, quantity: 10, unit_price: 350, status: 1)
+			@invit2 = InvoiceItem.create!(item_id: @knife.id, invoice_id: @inv1.id, quantity: 9, unit_price: 300, status: 1)
+			@invit3 = InvoiceItem.create!(item_id: @spoon.id, invoice_id: @inv1.id, quantity: 10, unit_price: 200, status: 1)
+			@invit4 = InvoiceItem.create!(item_id: @bed.id, invoice_id: @inv1.id, quantity: 8, unit_price: 2500, status: 1)
+	
+			expect(@merchant.merchant_invoice_items(@inv1.id)).to include(@invit1, @invit2, @invit3)
+		end
+		
 		describe '#invoices_with_items' do
 			it 'returns a list of distinct invoices' do
 				expect(@merchant.invoices_with_items).to contain_exactly(@inv1, @inv2, @inv3, @inv4, @inv5, @inv6)
@@ -84,13 +102,17 @@ RSpec.describe Merchant, type: :model do
 				expect(@merchant.best_day.created_at).to eq(@inv1.created_at)
 			end
 		end
-	end
 
-	describe "#top_five_merchants_by_revenue" do
-		it 'returns the 5 merchants with the most revenue' do
-			load_test_data
-			expect(Merchant.top_five_merchants_by_revenue).to eq [@merchant3, @merchant5, @merchant6, @merchant1, @merchant4]
+		describe "#top_five_merchants_by_revenue" do
+			it 'returns the 5 merchants with the most revenue' do
+				Merchant.destroy_all
+				Item.destroy_all
+				InvoiceItem.destroy_all
+				Customer.destroy_all
+				load_test_data
+				expect(Merchant.top_five_merchants_by_revenue).to eq [@merchant3, @merchant5, @merchant6, @merchant1, @merchant4]
+			end
 		end
-  end
+	end
 end
 

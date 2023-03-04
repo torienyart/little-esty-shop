@@ -95,3 +95,4 @@ def load_test_data
   @trans25 = @inv3.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
   
 end
+

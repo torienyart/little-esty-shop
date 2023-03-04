@@ -1,6 +1,7 @@
 class InvoiceItem < ApplicationRecord
   belongs_to :invoice
   belongs_to :item
+  has_many :bulk_discounts, through: :item
 
   enum status: ['pending', 'packaged', 'shipped']
 
@@ -10,5 +11,9 @@ class InvoiceItem < ApplicationRecord
 
   def self.total_revenue
     sum('invoice_items.unit_price * invoice_items.quantity')
+  end
+
+  def self.total_revenue_discount
+    
   end
 end

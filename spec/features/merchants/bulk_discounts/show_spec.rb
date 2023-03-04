@@ -33,6 +33,5 @@ describe 'as a merchant when i visit my bulk discount show page' do
       expect(page).to have_content('Quantity Threshold: 20')
       expect(page).to have_content('Discount Percentage: 20.0%')
     end
-  
   end
 end
