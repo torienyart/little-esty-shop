@@ -10,6 +10,11 @@
 	<p> Item: <%= ii.item.name %></p>
 	<p> Quantity: <%= ii.quantity %></p>
 	<p> Price: $<%= sprintf("%.2f", (ii.unit_price/100.00))%></p>
+	<% if @invoice.discounted_items.include?(ii) %>
+	 <%d_ii = @invoice.discounted_items.find(ii.id) %>
+		 <p> <%= link_to "#{(d_ii.bulk_discounts.first.percentage_discount*100).to_i}% Discount", merchant_bulk_discount_path(@merchant, d_ii.bulk_discounts.first)%> </p>
+	<%end%>	
+
 <%= form_with model: ii, url: merchant_invoice_path(@merchant, @invoice), method: :patch  do |f|%>
 <p>Invoice Item Status: <%= f.select(:status, InvoiceItem.statuses.keys, selected: "#{ii.status}") %>
 <%= f.hidden_field :ii_id, value: ii.id %>

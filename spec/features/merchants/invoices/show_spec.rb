@@ -126,5 +126,31 @@ RSpec.describe 'Merchant Invoices Index' do
 				expect(page).to have_content("Total Discounted Revenue: $52.50")
 			end
 		end
+
+		describe 'Discount Links' do
+			it 'Next to each invoice item I see a link to the show page for the bulk discount that was applied (if any)' do
+				visit "/merchants/#{@merchant.id}/invoices/#{@inv1.id}"
+
+				within "#invoice_item-#{@bowl.id}" do
+					expect(page).to have_link('10% Discount')
+
+					click_link '10% Discount'
+
+					expect(page.current_path).to eq(merchant_bulk_discount_path(@merchant.id, @bulk_discount.id))
+				end
+
+				visit "/merchants/#{@merchant.id}/invoices/#{@inv1.id}"
+
+				within "#invoice_item-#{@knife.id}" do
+					expect(page).to have_no_link('10% Discount')
+				end
+
+				within "#invoice_item-#{@plate.id}" do
+					expect(page).to have_no_link('10% Discount')
+				end
+
+				
+			end
+		end
 	end
 end

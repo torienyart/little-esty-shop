@@ -111,5 +111,16 @@ RSpec.describe Invoice, type: :model do
 
       expect(@inv1.total_discount).to eq(720 + 1800)
     end
+
+    it 'can return the items that can be discounted with their bulk_discount' do
+      @bd_a = @merchant1.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 0.20)
+      @bd_b = @merchant1.bulk_discounts.create!(quantity_threshold: 15, percentage_discount: 0.30)
+
+      @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 12 , unit_price: 600)
+      @invit2 = InvoiceItem.create!(item_id: @knife.id, invoice_id: @inv1.id, status: 2, quantity: 15 , unit_price: 400)
+      @invit3 = InvoiceItem.create!(item_id: @knife.id, invoice_id: @inv1.id, status: 2, quantity: 5 , unit_price: 400)
+
+      expect(@inv1.discounted_items).to include(@invit1, @invit2)
+    end
   end
 end
