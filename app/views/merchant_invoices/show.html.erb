@@ -25,6 +25,6 @@
 <% end %>
 
 <p> Total Revenue: $<%= sprintf("%.2f", (@invoice.total_revenue/100.00))%></p>
-<p> Total Discounted Revenue: $<%= sprintf("%.2f", (@invoice.discounted_revenue/100)) %> </p>
+<p> Total Discounted Revenue: $<%= sprintf("%.2f", (@invoice.merchant_discounted_revenue(@merchant.id)/100)) %> </p>
 
 

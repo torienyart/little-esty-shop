@@ -71,7 +71,7 @@ RSpec.describe Invoice, type: :model do
       @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
       @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
 
-      expect(@inv1.discounted_revenue).to eq(61712.0)
+      expect(@inv1.merchant_discounted_revenue(@merchant)).to eq(61712.0)
     end
 
     it 'will return the total even if no discounts are applied' do
@@ -79,7 +79,7 @@ RSpec.describe Invoice, type: :model do
       @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
       @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
 
-      expect(@inv1.discounted_revenue).to eq 63934
+      expect(@inv1.merchant_discounted_revenue(@merchant)).to eq 63934
     end
 
     it 'can handle multiple discounts on different items' do
@@ -89,7 +89,7 @@ RSpec.describe Invoice, type: :model do
       @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
       @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
 
-      expect(@inv1.discounted_revenue).to eq 59959
+      expect(@inv1.merchant_discounted_revenue(@merchant)).to eq 59959
 
     end
   end
