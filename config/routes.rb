@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 			get 'dashboard'
 		end
 
-    resources :invoices, only: [:show, :update]
+    resources :items, only: [:index, :new, :create, :show, :edit, :update] 
+
+    resources :invoices, only: [:index, :show, :update]
 
     resources :bulk_discounts, only: [:index, :show, :new, :create, :destroy, :edit, :update]
 	end
@@ -21,12 +23,6 @@ Rails.application.routes.draw do
   end
 
 
-  get "/merchants/:id/items", to: "merchant_items#index"
-	get "/merchants/:id/invoices", to: "merchant_invoices#index"
+	# get "/merchants/:id/invoices", to: "merchant_invoices#index"
 
-  get "/merchants/:merchant_id/items/new", to: "merchant_items#new"
-  post "/merchants/:merchant_id/items", to: "merchant_items#create"
-  get "/merchants/:merchant_id/items/:item_id", to: "merchant_items#show"
-  get "/merchants/:merchant_id/items/:item_id/edit", to: "merchant_items#edit"
-  patch "/merchants/:merchant_id/items/:item_id", to: "merchant_items#update"
 end

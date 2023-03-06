@@ -1,27 +1,26 @@
-class MerchantItemsController < ApplicationController
+class ItemsController < ApplicationController
   def index
-    @merchant = Merchant.find(params[:id])
+    @merchant = Merchant.find(params[:merchant_id])
     @top_items = @merchant.top_five_items_by_revenue
   end
 
 	def show
 		@merchant = Merchant.find(params[:merchant_id])
-		@item = @merchant.items.find(params[:item_id])
+		@item = @merchant.items.find(params[:id])
 	end
-
+  
   def new
     @merchant = Merchant.find(params[:merchant_id])
   end
 
 	def edit
 		@merchant = Merchant.find(params[:merchant_id])
-		@item = @merchant.items.find(params[:item_id])
+		@item = @merchant.items.find(params[:id])
 	end
 
   def create
 		@merchant = Merchant.find(params[:merchant_id])
-    @item = Item.new(item_params)
-    # @merchant_item = @merchant.items.find(params[:item_id])
+    @item = @merchant.items.new(item_params)
     
     if @item.save
       redirect_to "/merchants/#{@merchant.id}/items"
@@ -33,7 +32,7 @@ class MerchantItemsController < ApplicationController
 
 	def update
     @merchant = Merchant.find(params[:merchant_id])
-    @item = @merchant.items.find(params[:item_id])
+    @item = @merchant.items.find(params[:id])
 		if params[:status] == "disabled"
       @item.update(status: 1)
       redirect_to "/merchants/#{@merchant.id}/items"
