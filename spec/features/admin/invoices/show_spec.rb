@@ -169,7 +169,6 @@ describe "Admin Invoice Show Page" do
         end
   
         it 'I see the total revenue for my merchant from this invoice (not including discounts)' do
-          save_and_open_page
           expect(page).to have_content("Total Revenue: $1118.13")
         end
   

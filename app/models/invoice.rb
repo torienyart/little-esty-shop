@@ -4,7 +4,6 @@ class Invoice < ApplicationRecord
   has_many :items, through: :invoice_items
   has_many :transactions
   has_many :merchants, through: :items
-  # has_many :bulk_discounts, through: :items
   
   enum status: ["in progress", "completed", "cancelled"]
 
@@ -13,7 +12,7 @@ class Invoice < ApplicationRecord
   end
 
   def total_discount
-    invoice_items.joins(:bulk_discounts)
+    x = invoice_items.joins(:bulk_discounts)
     .where('invoice_items.quantity >= bulk_discounts.quantity_threshold')
     .select('invoice_items.*, max(bulk_discounts.percentage_discount * invoice_items.quantity * invoice_items.unit_price) as discount_rev')
     .group(:id)

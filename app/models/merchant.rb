@@ -42,6 +42,5 @@ class Merchant < ApplicationRecord
 
   def merchant_invoice_items(invoice_id)
     invoice_items.where(invoice_id:invoice_id)
-    # require 'pry'; binding.pry
   end
 end
