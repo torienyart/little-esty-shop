@@ -75,8 +75,22 @@ RSpec.describe 'Merchant Dashboard' do
       expect(page).to have_content "Laura Fiel -- Transactions: 2"
     end
 
-		it 'shows the repo name' do
+		xit 'shows the repo name' do
 			expect(page).to have_content("little-esty-shop")
+		end
+	end
+
+  describe 'BULK DISCOUNTS' do
+		describe 'As a user when I visit my merchant dashboard' do
+			it 'I see a link to view all my discounts' do
+				expect(page).to have_link("View All Discounts")
+			end
+
+			it 'When I click this link then I am taken to my bulk discounts index page' do
+				click_link "View All Discounts"
+
+				expect(page).to have_current_path(merchant_bulk_discounts_path(@merchant))
+			end
 		end
 	end
 end

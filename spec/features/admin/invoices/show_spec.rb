@@ -10,6 +10,9 @@ describe "Admin Invoice Show Page" do
         @inv1 = @cust1.invoices.create!(status: 1, created_at: w)
         @bowl = @merchant.items.create!(name: "bowl", description: "it's a bowl", unit_price: 350) 
         @knife = @merchant.items.create!(name: "knife", description: "it's a knife", unit_price: 250) 
+        @bulk_discount = @merchant.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 0.10)
+        @bulk_discount = @merchant.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 0.10)
+
 
         @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
         @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
@@ -19,6 +22,7 @@ describe "Admin Invoice Show Page" do
 
         visit "/admin/invoices/#{@inv1.id}"
       end
+
       describe 'I see information related to that invoice including' do
         
 
@@ -147,6 +151,32 @@ describe "Admin Invoice Show Page" do
           expect(page).to have_content('Invoice Status has been updated successfully')
         end
       end
+
+      describe 'Discounted Revenue' do
+        before :each do
+          
+          @merchant2 = Merchant.create!(name: "Your Name") 
+          @shirt = @merchant2.items.create!(name: "shirt", description: "it's a shirt", unit_price: 250) 
+          
+          
+          @bulk_discount = @merchant.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 0.10)
+          @bulk_discount = @merchant.bulk_discounts.create!(quantity_threshold: 15, percentage_discount: 0.20)
+          @bulk_discount = @merchant2.bulk_discounts.create!(quantity_threshold: 10, percentage_discount: 0.15)
+          
+          @invit6 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 15 , unit_price: 987)
+          @invit7 = InvoiceItem.create!(item_id: @shirt.id, invoice_id: @inv1.id, status: 2, quantity: 12 , unit_price: 970)
+          visit "/admin/invoices/#{@inv1.id}"
+        end
+  
+        it 'I see the total revenue for my merchant from this invoice (not including discounts)' do
+          expect(page).to have_content("Total Revenue: $1118.13")
+        end
+  
+        it 'I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation' do
+          expect(page).to have_content("Total Discounted Revenue: $1048.84")
+        end
+      end
     end
+
   end
 end

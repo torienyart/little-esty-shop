@@ -1,0 +1,20 @@
+<h1><%=@merchant.name%>'s Bulk Discounts</h1>
+<p><%= link_to "Create Bulk Discount", new_merchant_bulk_discount_path(@merchant) %>
+
+<div id="upcoming_holidays">
+  <h2>Upcoming Holidays</h2>
+  <% @next_holidays.each do |holiday|%>
+    <p>Holiday: <%= holiday.name%></p>
+    <p>Date: <%= holiday.date%></p>
+    <br>
+  <%end%>
+</div>
+
+<%@bulk_discounts.each do |discount|%>
+<div id="bd-<%=discount.id%>">
+<h3> <%=link_to "Bulk Discount #{discount.id}", merchant_bulk_discount_path(discount.merchant_id, discount) %></h3>
+<p>Discount Percentage: <%=discount.percentage_discount * 100%>%</p>
+<p>Quantity Threshold: <%=discount.quantity_threshold%></p>
+<p><%= button_to "Delete Bulk Discount", "/merchants/#{@merchant.id}/bulk_discounts/#{discount.id}", method: :delete, local: true %>
+</div>
+<%end%>

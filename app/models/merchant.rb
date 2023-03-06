@@ -4,13 +4,14 @@ class Merchant < ApplicationRecord
   has_many :invoices, through: :invoice_items
   has_many :customers, -> { distinct }, through: :invoices  
   has_many :transactions, -> { distinct }, through: :invoices
+  has_many :bulk_discounts
 
   validates_presence_of :name, presence: true
 
   enum status: ["disabled", "enabled"]
 
   def invoices_with_items
-	invoices.select(:id).distinct
+	  invoices.select(:id).distinct
   end
 				
   def top_five_items_by_revenue
@@ -37,5 +38,9 @@ class Merchant < ApplicationRecord
     .group('id')
     .order('revenue DESC')
     .limit(5)
+  end
+
+  def merchant_invoice_items(invoice_id)
+    invoice_items.where(invoice_id:invoice_id)
   end
 end

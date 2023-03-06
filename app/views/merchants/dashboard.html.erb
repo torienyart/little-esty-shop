@@ -2,6 +2,7 @@
 
 <%= link_to "My Merchant Items Index", "/merchants/#{@merchant.id}/items" %> <br>
 <%= link_to "My Merchant Invoices Index", "/merchants/#{@merchant.id}/invoices" %> <br>
+<%= link_to "View All Discounts", merchant_bulk_discounts_path(@merchant) %> <br>
 
 <h2>Top Five Customers:</h3>
 <% @top_five_customers.each do |customer| %>
