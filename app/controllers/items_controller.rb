@@ -35,16 +35,16 @@ class ItemsController < ApplicationController
     @item = @merchant.items.find(params[:id])
 		if params[:status] == "disabled"
       @item.update(status: 1)
-      redirect_to "/merchants/#{@merchant.id}/items"
+      redirect_to merchant_items_path(@merchant)
     elsif params[:status] == "enabled"
       @item.update(status: 0)
-      redirect_to "/merchants/#{@merchant.id}/items"
+      redirect_to merchant_items_path(@merchant)
 		elsif @item.update(item_params)
 			flash[:success] = "Item updated successfully"
-    	redirect_to "/merchants/#{@merchant.id}/items/#{@item.id}"
+    	redirect_to merchant_item_path(@merchant, @item)
 		else
 			flash[:fail] = "Item unable to be updated"
-    	redirect_to "/merchants/#{@merchant.id}/items/#{@item.id}/edit"
+    	redirect_to edit_merchant_item_path(@merchant, @item)
   	end
 	end
   
