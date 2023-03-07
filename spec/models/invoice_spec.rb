@@ -63,34 +63,43 @@ RSpec.describe Invoice, type: :model do
       
     end
 
-    it 'can calculate total discounted revenue' do
+    describe 'merchant specific revenue' do
+      it 'can calculate total discounted revenue for a particular merchant' do
+        @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
+        ## Adds a second applicable discount to same invoice_item to test that only the highest discount is applied
+        @bulk_discount2 = @merchant.bulk_discounts.create!(name: "9% off 5 items", percentage_discount: 0.09, quantity_threshold: 5)
+        @bulk_discount2 = @merchant.bulk_discounts.create!(name: "5% off 4 items", percentage_discount: 0.05, quantity_threshold: 4)
+        @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
+        @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
+        @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
+        
+        expect(@inv1.merchant_discounted_revenue(@merchant)).to eq 59959
+        
+      end
+      
+      it 'will return the total even if no discounts are applied' do
+        @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
+        @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
+        @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
+
+        expect(@inv1.merchant_discounted_revenue(@merchant)).to eq 63934
+      end
+    end
+
+    it 'can calculate total discounted revenue for an invoice' do
+      @merchant2 = Merchant.create!(name: "Merchant 2")
+      @sofa = @merchant2.items.create!(name: "sofa", description: "it's a sofa", unit_price: 350)
+
       @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
       ## Adds a second applicable discount to same invoice_item to test that only the highest discount is applied
-      @bulk_discount2 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.09, quantity_threshold: 5)
+      @bulk_discount2 = @merchant.bulk_discounts.create!(name: "9% off 5 items", percentage_discount: 0.09, quantity_threshold: 5)
+      @bulk_discount2 = @merchant.bulk_discounts.create!(name: "5% off 4 items", percentage_discount: 0.05, quantity_threshold: 4)
       @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
       @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
       @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
+      @invit4 = InvoiceItem.create!(item_id: @sofa.id, invoice_id: @inv1.id, status: 2, quantity: 7, unit_price: 5000)
 
-      expect(@inv1.merchant_discounted_revenue(@merchant)).to eq(61712.0)
-    end
-
-    it 'will return the total even if no discounts are applied' do
-      @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
-      @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
-      @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
-
-      expect(@inv1.merchant_discounted_revenue(@merchant)).to eq 63934
-    end
-
-    it 'can handle multiple discounts on different items' do
-      @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
-      @bulk_discount2 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.05, quantity_threshold: 4)
-      @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
-      @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
-      @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
-
-      expect(@inv1.merchant_discounted_revenue(@merchant)).to eq 59959
-
+      expect(@inv1.discounted_revenue).to eq 94959
     end
   end
 end

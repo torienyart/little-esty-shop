@@ -9,6 +9,8 @@ RSpec.describe 'Merchant Invoices Index' do
 		Transaction.destroy_all
 		InvoiceItem.destroy_all
 		@merchant = Merchant.create!(name: "Carlos Jenkins") 
+    @merchant2 = Merchant.create!(name: "Bob Jenkins")
+
 		@cust1 = Customer.create!(first_name: "Laura", last_name: "Fiel")
 		@cust2 = Customer.create!(first_name: "Bob", last_name: "Fiel")
 		
@@ -18,13 +20,16 @@ RSpec.describe 'Merchant Invoices Index' do
 		@bowl = @merchant.items.create!(name: "bowl", description: "it's a bowl", unit_price: 350) 
 		@knife = @merchant.items.create!(name: "knife", description: "it's a knife", unit_price: 250) 
 		@plate = @merchant.items.create!(name: "plate", description: "it's a plate", unit_price: 250) 
-		
+		@fork = @merchant2.items.create!(name: "fork", description: "it's a fork", unit_price: 250)
+
 		@trans1 = @inv1.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
 		@trans2 = @inv2.transactions.create!(credit_card_number: 5555555555555555, credit_card_expiration_date: nil, result: 0)
 		
 		InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, quantity: 10, unit_price: 350, status: 1)
 		InvoiceItem.create!(item_id: @knife.id, invoice_id: @inv1.id, quantity: 5, unit_price: 300, status: 1)
 		InvoiceItem.create!(item_id: @plate.id, invoice_id: @inv1.id, quantity: 3, unit_price: 200, status: 1)
+		
+    InvoiceItem.create!(item_id: @fork.id, invoice_id: @inv1.id, quantity: 10, unit_price: 350, status: 1)
 
 		InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv2.id, quantity: 20, unit_price: 350, status: 1)
 		InvoiceItem.create!(item_id: @knife.id, invoice_id: @inv2.id, quantity: 10, unit_price: 300, status: 1)
